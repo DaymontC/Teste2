@@ -1,90 +1,90 @@
 openapi: 3.0.0
 info:
-  title: API da Livraria Online
+  title: Online Bookstore API
   version: 1.0.0
-  description: Documentação da API para uma livraria online.
+  description: API documentation for an online bookstore.
 servers:
-  - url: https://api.exemplo.com/v1
+  - url: https://api.example.com/v1
 paths:
-  /livros:
+  /books:
     get:
-      summary: Obter lista de livros
+      summary: Get list of books
       parameters:
-        - name: página
+        - name: page
           in: query
-          description: Número da página para paginação
+          description: Page number for pagination
           schema:
             type: integer
-        - name: limite
+        - name: limit
           in: query
-          description: Número de itens por página
+          description: Number of items per page
           schema:
             type: integer
       responses:
         '200':
-          description: Resposta bem-sucedida
+          description: Successful response
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Livro'
-  /livros/busca:
+                  $ref: '#/components/schemas/Book'
+  /books/search:
     get:
-      summary: Pesquisar livros por título ou autor
+      summary: Search books by title or author
       parameters:
-        - name: consulta
+        - name: query
           in: query
-          description: Consulta de pesquisa
+          description: Search query
           schema:
             type: string
             example: "Harry Potter"
       responses:
         '200':
-          description: Resposta bem-sucedida
+          description: Successful response
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Livro'
-  /livros/{isbn}:
+                  $ref: '#/components/schemas/Book'
+  /books/{isbn}:
     get:
-      summary: Obter livro pelo ISBN
+      summary: Get book by ISBN
       parameters:
         - name: isbn
           in: path
-          description: ISBN do livro a ser recuperado
+          description: ISBN of the book to be retrieved
           required: true
           schema:
             type: string
       responses:
         '200':
-          description: Resposta bem-sucedida
+          description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Livro'
-  /carrinho:
+                $ref: '#/components/schemas/Book'
+  /cart:
     post:
-      summary: Criar um novo carrinho de compras
+      summary: Create a new shopping cart
       responses:
         '200':
-          description: Resposta bem-sucedida
+          description: Successful response
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  idCarrinho:
+                  cartId:
                     type: string
-  /carrinho/{idCarrinho}/itens:
+  /cart/{cartId}/items:
     post:
-      summary: Adicionar um livro ao carrinho
+      summary: Add a book to the cart
       parameters:
-        - name: idCarrinho
+        - name: cartId
           in: path
-          description: ID do carrinho
+          description: Cart ID
           required: true
           schema:
             type: string
@@ -97,44 +97,44 @@ paths:
               properties:
                 isbn:
                   type: string
-                  description: ISBN do livro a ser adicionado
-                quantidade:
+                  description: ISBN of the book to be added
+                quantity:
                   type: integer
-                  description: Quantidade do livro a ser adicionada
+                  description: Quantity of the book to be added
       responses:
         '200':
-          description: Resposta bem-sucedida
-  /carrinho/{idCarrinho}/itens/{isbn}:
+          description: Successful response
+  /cart/{cartId}/items/{isbn}:
     delete:
-      summary: Remover um livro do carrinho
+      summary: Remove a book from the cart
       parameters:
-        - name: idCarrinho
+        - name: cartId
           in: path
-          description: ID do carrinho
+          description: Cart ID
           required: true
           schema:
             type: string
         - name: isbn
           in: path
-          description: ISBN do livro a ser removido
+          description: ISBN of the book to be removed
           required: true
           schema:
             type: string
       responses:
         '204':
-          description: Sem conteúdo
+          description: No content
     patch:
-      summary: Atualizar a quantidade de um livro no carrinho
+      summary: Update quantity of a book in the cart
       parameters:
-        - name: idCarrinho
+        - name: cartId
           in: path
-          description: ID do carrinho
+          description: Cart ID
           required: true
           schema:
             type: string
         - name: isbn
           in: path
-          description: ISBN do livro a ser atualizado
+          description: ISBN of the book to be updated
           required: true
           schema:
             type: string
@@ -145,75 +145,18 @@ paths:
             schema:
               type: object
               properties:
-                quantidade:
+                quantity:
                   type: integer
-                  description: Nova quantidade do livro no carrinho
+                  description: New quantity of the book in the cart
       responses:
         '200':
-          description: Resposta bem-sucedida
-  /carrinho/{idCarrinho}:
+          description: Successful response
+  /cart/{cartId}:
     get:
-      summary: Obter estado atual do carrinho
+      summary: Get current state of the cart
       parameters:
-        - name: idCarrinho
+        - name: cartId
           in: path
-          description: ID do carrinho
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Resposta bem-sucedida
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  idCarrinho:
-                    type: string
-                  itens:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/ItemCarrinho'
-components:
-  schemas:
-    Livro:
-      type: object
-      properties:
-        isbn:
-          type: string
-        titulo:
-          type: string
-        autor:
-          type: string
-        preco:
-          type: number
-        descricao:
-          type: string
-    ItemCarrinho:
-      type: object
-      properties:
-        isbn:
-          type: string
-        quantidade:
-          type: integer
-    Pedido:
-      type: object
-      properties:
-        idPedido:
-          type: string
-        itens:
-          type: array
-          items:
-            $ref: '#/components/schemas/ItemCarrinho'
-        custoTotal:
-          type: number
-        informacoesCliente:
-          type: object
-          properties:
-            nome:
-              type: string
-            endereco:
-              type: string
-        status:
-          type: string
+          description: Cart ID
+          required:
+          
